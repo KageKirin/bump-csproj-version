@@ -14,10 +14,20 @@ jobs:
         uses: ./ # Uses an action in the root directory
         id: test
         with:
+          version: '1.2.3'
           file: 'testproj/testproj.csproj'
 
       - name: Print results
         run: echo ${{ steps.test.outputs.version }}
+
+      - name: Verify results
+        if: ${{ steps.test.outputs.version == '1.2.3' }}
+        run: echo "Setting the version worked"
+      - name: Verify results (negative case)
+        if: ${{ steps.test.outputs.version != '1.2.3' }}
+        run: |
+          echo "Setting the version did not work"
+          exit -1
 
       - name: Test functionality with params
         uses: ./ # Uses an action in the root directory
@@ -25,7 +35,17 @@ jobs:
         with:
           file: 'testproj/testproj.csproj'
           regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
+          version: '4.5.6'
           xpath: '//PropertyGroup/Version'
 
       - name: Print results
         run: echo ${{ steps.testparams.outputs.version }}
+
+      - name: Verify results
+        if: ${{ steps.testparams.outputs.version == '4.5.6' }}
+        run: echo "Setting the version worked"
+      - name: Verify results (negative case)
+        if: ${{ steps.testparams.outputs.version != '4.5.6' }}
+        run: |
+          echo "Setting the version did not work"
+          exit -1

@@ -1,12 +1,12 @@
-name: 'Get CSProj Version'
-description: 'Retrieves the current version from a given .csproj'
+name: 'Set CSProj Version'
+description: 'Sets the current version to a given .csproj'
 branding:
     icon: 'anchor'
     color: 'blue'
 inputs:
   file:
     description: |
-      'The .csproj from which to read the version.'
+      'The .csproj from which to read/write the version.'
       'Set if you need to read a different file / or different folder.'
     required: true
   regex:
@@ -21,9 +21,14 @@ inputs:
       'XPath to version element.'
     required: false
     default: '//PropertyGroup/Version'
+  version:
+    description: |
+      'The semver version to set.'
+      'Version has to be compatible to the provided regex.'
+    required: true
 outputs:
   version:
-    description: 'Retrieved and verified version string'
+    description: 'Verified and set version string'
 runs:
   using: 'node12'
   main: 'dist/index.js'

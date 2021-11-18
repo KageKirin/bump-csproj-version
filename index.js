@@ -2,10 +2,11 @@
 const fs = require('fs');
 const core = require('@actions/core');
 const xpath = require('xpath')
-const { DOMParser } = require('@xmldom/xmldom')
+const { DOMParser, XMLSerializer } = require('@xmldom/xmldom')
 
 const file = core.getInput('file');
 const regex = core.getInput('regex');
+const version = core.getInput('version');
 const xpath_location = core.getInput('xpath');
 
 /// run
@@ -17,10 +18,11 @@ async function run()
         const verElement = get_csproj_version(doc);
         if (verElement)
         {
-            const ver = parse_version(verElement.data);
+            const ver = parse_version(version);
             if (ver)
             {
-                core.setOutput('version', verElement.data);
+                verElement.data = version;
+                write_csproj(file, doc);
             }
             else
             {
@@ -30,6 +32,35 @@ async function run()
         else
         {
             core.setFailed("invalid .csproj does not contain version");
+        }
+
+        // read back
+        const doc2 = read_csproj(file);
+        const verElement2 = get_csproj_version(doc2);
+        if (verElement2)
+        {
+            const ver = parse_version(verElement2.data);
+            if (ver)
+            {
+                core.setOutput('version', verElement2.data);
+            }
+            else
+            {
+                core.setFailed("failed to parse .csproj version at read back");
+            }
+
+            if (verElement2.data === verElement.data)
+            {
+                // no issues
+            }
+            else
+            {
+                core.setFailed("readback version different from input version");
+            }
+        }
+        else
+        {
+            core.setFailed("invalid .csproj does not contain version at read back");
         }
     }
     catch (error)
@@ -81,6 +112,13 @@ function read_csproj(csprojfile)
     }
 
     return doc;
+}
+
+function write_csproj(csprojfile, doc)
+{
+    const serializer = new XMLSerializer();
+    const xml = serializer.serializeToString(doc);
+    fs.writeFileSync(csprojfile, xml + '\n');
 }
 
 run()

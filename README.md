@@ -1,4 +1,4 @@
-# get-csproj-version-action
+# set-csproj-version-action
 
-GitHub Action to retrieve the current version from a dotnet .csproj project file.
-Places the retrieved version into a context variable for later reference.
+GitHub Action to set the current version to a dotnet .csproj project file.
+Places the set version into a context variable for later reference.
