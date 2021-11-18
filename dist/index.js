@@ -1682,7 +1682,9 @@ const core = __nccwpck_require__(619);
 
 const file = core.getInput('file');
 const regex = core.getInput('regex');
-const version = core.getInput('version');
+const bump_major = core.getInput('major') === 'true' || core.getInput('major') > 0;
+const bump_minor = core.getInput('minor') === 'true' || core.getInput('minor') > 0;
+const bump_patch = core.getInput('patch') === 'true' || core.getInput('patch') > 0;
 
 
 /// run
@@ -1693,10 +1695,27 @@ async function run()
         const pkg = JSON.parse(fs.readFileSync(file));
         if (pkg.version)
         {
-            const ver = parse_version(version);
+            const ver = parse_version(pkg.version);
             if (ver)
             {
-                pkg.version = version;
+                let [major, minor, patch] = ver;
+                console.dir({ver})
+                console.dir({major, minor, patch})
+                console.dir({bump_major, bump_minor, bump_patch})
+
+                if (bump_major)
+                {
+                    major++;
+                }
+                if (bump_minor)
+                {
+                    minor++;
+                }
+                if (bump_patch)
+                {
+                    patch++;
+                }
+                pkg.version = `${major}.${minor}.${patch}`;
                 fs.writeFileSync(file, JSON.stringify(pkg, null, '  ') + '\n');
             }
             else
