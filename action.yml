@@ -1,8 +1,8 @@
 name: 'Bump CSProj Version'
 description: 'Bumps the current version of a given .csproj'
 branding:
-    icon: 'anchor'
-    color: 'blue'
+  icon: anchor
+  color: blue
 inputs:
   file:
     description: |
