@@ -10,8 +10,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: TODO/Set version to fixed rev
-        run: echo TODO/Set version to fixed rev
+      - name: Set version to fixed rev
+        uses: KageKirin/set-node-package-version@v0
+        with:
+          version: '1.2.3-beta.5+foobar.42'
 
       - name: Test functionality (major)
         uses: ./ # Uses an action in the root directory
@@ -23,10 +25,10 @@ jobs:
         run: echo ${{ steps.test_major.outputs.version }}
 
       - name: Verify results
-        if: ${{ steps.test_major.outputs.version == '1.0.1' }}
+        if: ${{ steps.test_major.outputs.version == '2.2.3-beta.5+foobar.42' }}
         run: echo "Bumping the version major worked"
       - name: Verify results (negative case)
-        if: ${{ steps.test_major.outputs.version != '1.0.1' }}
+        if: ${{ steps.test_major.outputs.version != '2.2.3-beta.5+foobar.42' }}
         run: |
           echo "Bumping the version major did not work"
           exit -1
@@ -41,10 +43,10 @@ jobs:
         run: echo ${{ steps.test_minor.outputs.version }}
 
       - name: Verify results
-        if: ${{ steps.test_minor.outputs.version == '1.1.1' }}
+        if: ${{ steps.test_minor.outputs.version == '2.3.3-beta.5+foobar.42' }}
         run: echo "Bumping the version minor worked"
       - name: Verify results (negative case)
-        if: ${{ steps.test_minor.outputs.version != '1.1.1' }}
+        if: ${{ steps.test_minor.outputs.version != '2.3.3-beta.5+foobar.42' }}
         run: |
           echo "Bumping the version minor did not work"
           exit -1
@@ -59,13 +61,19 @@ jobs:
         run: echo ${{ steps.test_patch.outputs.version }}
 
       - name: Verify results
-        if: ${{ steps.test_patch.outputs.version == '1.1.2' }}
+        if: ${{ steps.test_patch.outputs.version == '2.3.4-beta.5+foobar.42' }}
         run: echo "Bumping the version patch worked"
       - name: Verify results (negative case)
-        if: ${{ steps.test_patch.outputs.version != '1.1.2' }}
+        if: ${{ steps.test_patch.outputs.version != '2.3.4-beta.5+foobar.42' }}
         run: |
           echo "Bumping the version patch did not work"
           exit -1
+
+
+      - name: Set version to fixed rev
+        uses: KageKirin/set-node-package-version@v0
+        with:
+          version: '1.2.3'
 
       - name: Test functionality with params
         uses: ./ # Uses an action in the root directory
@@ -81,10 +89,10 @@ jobs:
         run: echo ${{ steps.testparams.outputs.version }}
 
       - name: Verify results
-        if: ${{ steps.testparams.outputs.version == '2.2.3' }}
+        if: ${{ steps.testparams.outputs.version == '2.3.4' }}
         run: echo "Bumping the version worked"
       - name: Verify results (negative case)
-        if: ${{ steps.testparams.outputs.version != '2.2.3' }}
+        if: ${{ steps.testparams.outputs.version != '2.3.4' }}
         run: |
           echo "Bumping the version did not work"
           exit -1
@@ -103,10 +111,10 @@ jobs:
         run: echo ${{ steps.intparams.outputs.version }}
 
       - name: Verify results
-        if: ${{ steps.intparams.outputs.version == '3.3.3' }}
+        if: ${{ steps.intparams.outputs.version == '3.4.4' }}
         run: echo "Bumping the version worked"
       - name: Verify results (negative case)
-        if: ${{ steps.intparams.outputs.version != '3.3.3' }}
+        if: ${{ steps.intparams.outputs.version != '3.4.4' }}
         run: |
           echo "Bumping the version did not work"
           exit -1
