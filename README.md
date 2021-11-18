@@ -18,7 +18,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
