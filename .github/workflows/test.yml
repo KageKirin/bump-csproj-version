@@ -10,22 +10,61 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Test functionality
+      - name: TODO/Set version to fixed rev
+        run: echo TODO/Set version to fixed rev
+
+      - name: Test functionality (major)
         uses: ./ # Uses an action in the root directory
-        id: test
+        id: test_major
         with:
-          version: '1.2.3'
+          major: true
 
       - name: Print results
-        run: echo ${{ steps.test.outputs.version }}
+        run: echo ${{ steps.test_major.outputs.version }}
 
       - name: Verify results
-        if: ${{ steps.test.outputs.version == '1.2.3' }}
-        run: echo "Setting the version worked"
+        if: ${{ steps.test_major.outputs.version == '1.0.1' }}
+        run: echo "Bumping the version major worked"
       - name: Verify results (negative case)
-        if: ${{ steps.test.outputs.version != '1.2.3' }}
+        if: ${{ steps.test_major.outputs.version != '1.0.1' }}
         run: |
-          echo "Setting the version did not work"
+          echo "Bumping the version major did not work"
+          exit -1
+
+      - name: Test functionality (minor)
+        uses: ./ # Uses an action in the root directory
+        id: test_minor
+        with:
+          minor: true
+
+      - name: Print results
+        run: echo ${{ steps.test_minor.outputs.version }}
+
+      - name: Verify results
+        if: ${{ steps.test_minor.outputs.version == '1.1.1' }}
+        run: echo "Bumping the version minor worked"
+      - name: Verify results (negative case)
+        if: ${{ steps.test_minor.outputs.version != '1.1.1' }}
+        run: |
+          echo "Bumping the version minor did not work"
+          exit -1
+
+      - name: Test functionality (patch)
+        uses: ./ # Uses an action in the root directory
+        id: test_patch
+        with:
+          patch: true
+
+      - name: Print results
+        run: echo ${{ steps.test_patch.outputs.version }}
+
+      - name: Verify results
+        if: ${{ steps.test_patch.outputs.version == '1.1.2' }}
+        run: echo "Bumping the version patch worked"
+      - name: Verify results (negative case)
+        if: ${{ steps.test_patch.outputs.version != '1.1.2' }}
+        run: |
+          echo "Bumping the version patch did not work"
           exit -1
 
       - name: Test functionality with params
@@ -34,16 +73,40 @@ jobs:
         with:
           file: 'package.json'
           regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
-          version: '4.5.6'
+          major: true
+          minor: true
+          patch: true
 
       - name: Print results
         run: echo ${{ steps.testparams.outputs.version }}
 
       - name: Verify results
-        if: ${{ steps.testparams.outputs.version == '4.5.6' }}
-        run: echo "Setting the version worked"
+        if: ${{ steps.testparams.outputs.version == '2.2.3' }}
+        run: echo "Bumping the version worked"
       - name: Verify results (negative case)
-        if: ${{ steps.testparams.outputs.version != '4.5.6' }}
+        if: ${{ steps.testparams.outputs.version != '2.2.3' }}
         run: |
-          echo "Setting the version did not work"
+          echo "Bumping the version did not work"
+          exit -1
+
+      - name: Test functionality with int params
+        uses: ./ # Uses an action in the root directory
+        id: intparams
+        with:
+          file: 'package.json'
+          regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
+          major: 1
+          minor: 1
+          patch: 0
+
+      - name: Print results
+        run: echo ${{ steps.intparams.outputs.version }}
+
+      - name: Verify results
+        if: ${{ steps.intparams.outputs.version == '3.3.3' }}
+        run: echo "Bumping the version worked"
+      - name: Verify results (negative case)
+        if: ${{ steps.intparams.outputs.version != '3.3.3' }}
+        run: |
+          echo "Bumping the version did not work"
           exit -1
