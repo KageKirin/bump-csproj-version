@@ -8,30 +8,33 @@ Places the bumped version into a context variable for later reference.
 In a GitHub Workflow that runs after pushing a tag:
 
 ```yaml
-name: Auto-version on tag
+name: Auto-bump-version on merging a Pull Request
 
 on:
-  push:
-    tags:
-      - '*'
+  pull_request:
+    branches:
+      - main
+    types: [closed]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set version
+      - name: Bump version
         id: package_version
-        uses: KageKirin/set-node-package-version@v0
+        uses: KageKirin/bump-node-package-version@v0
         with:
-          version: ${{ github.ref_name }}
+          patch: true
 
       - name: Commit new version
         run: |
-          git commit -am "CI: update version from tag"
-          git push https://${{ github.token }}@github.com/OWNER/REPO
+          git commit -am "CI: bump version to ${{ steps.test.package_version.version }}"
+          git tag -m "CI: create new tag" v${{ steps.test.package_version.version }}
+          git push --follow-tags https://${{ github.token }}@github.com/OWNER/REPO
 ```
 
 ## Inputs
@@ -48,10 +51,10 @@ or lies in a subfolder.
 This is the Regular Expression used to verify the version.
 It defaults to an equivalent of `major.minor.patch` and requires all 3 integers to be present.
 
-### `version` (input)
+### `major`, `minor` and `patch`
 
-This is the version string to write into the package.
-It must match the provided `regex` format.
+These 3 input variables represent the 3 levels of semantic versioning.
+They must be set to `true` or `false` depending on which version level you want to increment.
 
 ## Outputs
 
