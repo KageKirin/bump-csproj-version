@@ -1,4 +1,4 @@
-# set-csproj-version-action
+# set-csproj-version
 
 GitHub Action to set the current version to a dotnet .csproj project file.
 Places the set version into a context variable for later reference.
