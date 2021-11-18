@@ -1,5 +1,5 @@
-name: 'Set Package Version'
-description: 'Set the current version to a given package.json'
+name: 'Bump Package Version'
+description: 'Bump the current version of a given package.json'
 branding:
     icon: 'anchor'
     color: 'blue'
@@ -18,14 +18,21 @@ inputs:
       'Set if you to be compatible with a different, non-semver format.'
     required: false
     default: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
-  version:
+  major:
     description: |
-      'The semver version to set.'
-      'Version has to be compatible to the provided regex.'
-    required: true
+      'Whether to bump the major revision.'
+    default: false
+  minor:
+    description: |
+      'Whether to bump the minor revision.'
+    default: false
+  patch:
+    description: |
+      'Whether to bump the patch revision.'
+    default: false
 outputs:
   version:
-    description: 'Verified and set version string'
+    description: 'Verified and bumped version string'
 runs:
   using: 'node12'
   main: 'dist/index.js'
