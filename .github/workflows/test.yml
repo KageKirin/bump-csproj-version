@@ -47,3 +47,21 @@ jobs:
         run: |
           echo "Setting the version did not work"
           exit -1
+
+      - name: Test complexity
+        uses: ./ # Uses an action in the root directory
+        id: testcomplex
+        with:
+          version: '1.2.3-beta.5+foobar.42'
+
+      - name: Print results
+        run: echo ${{ steps.testcomplex.outputs.version }}
+
+      - name: Verify results
+        if: ${{ steps.testcomplex.outputs.version == '1.2.3-beta.5+foobar.42' }}
+        run: echo "Setting the version worked"
+      - name: Verify results (negative case)
+        if: ${{ steps.testcomplex.outputs.version != '1.2.3-beta.5+foobar.42' }}
+        run: |
+          echo "Setting the version did not work"
+          exit -1
