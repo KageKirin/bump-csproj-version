@@ -1,10 +1,10 @@
 {
-  "name": "set-package-version-action",
+  "name": "set-node-package-version-action",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx @vercel/ncc build && npx convert-action"
   },
   "repository": {
     "type": "git",

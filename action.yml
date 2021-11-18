@@ -1,8 +1,8 @@
-name: 'Set Package Version'
+name: 'Set Node Package Version'
 description: 'Set the current version to a given package.json'
 branding:
-    icon: 'anchor'
-    color: 'blue'
+  icon: anchor
+  color: blue
 inputs:
   file:
     description: |
