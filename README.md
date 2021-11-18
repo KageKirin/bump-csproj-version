@@ -1,4 +1,4 @@
-# get-package-version-action
+# set-package-version-action
 
-GitHub Action to retrieve the current version from a package.json.
-Places the retrieved version into a context variable for later reference.
+GitHub Action to set the current version to a package.json.
+Places the set version into a context variable for later reference.
