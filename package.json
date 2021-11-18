@@ -1,5 +1,5 @@
 {
-  "name": "set-node-package-version-action",
+  "name": "set-node-package-version",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/KageKirin/set-package-version-action.git"
+    "url": "git+ssh://git@github.com/KageKirin/set-package-version.git"
   },
   "keywords": [
     "semver"
@@ -16,9 +16,9 @@
   "author": "Chris Helmich",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/KageKirin/set-package-version-action/issues"
+    "url": "https://github.com/KageKirin/set-package-version/issues"
   },
-  "homepage": "https://github.com/KageKirin/set-package-version-action#readme",
+  "homepage": "https://github.com/KageKirin/set-package-version#readme",
   "dependencies": {
     "@actions/core": "^1.6.0"
   }
