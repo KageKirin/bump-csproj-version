@@ -1,8 +1,8 @@
 name: 'Set CSProj Version'
 description: 'Sets the current version to a given .csproj'
 branding:
-    icon: 'anchor'
-    color: 'blue'
+  icon: anchor
+  color: blue
 inputs:
   file:
     description: |
