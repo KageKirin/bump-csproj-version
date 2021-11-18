@@ -1,4 +1,4 @@
-# set-node-package-version-action
+# set-node-package-version
 
 GitHub Action to set the current version to a package.json.
 Places the set version into a context variable for later reference.
