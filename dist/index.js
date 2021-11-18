@@ -9415,8 +9415,10 @@ const { DOMParser, XMLSerializer } = __nccwpck_require__(378)
 
 const file = core.getInput('file');
 const regex = core.getInput('regex');
-const version = core.getInput('version');
 const xpath_location = core.getInput('xpath');
+const bump_major = core.getInput('major') === 'true' || core.getInput('major') > 0;
+const bump_minor = core.getInput('minor') === 'true' || core.getInput('minor') > 0;
+const bump_patch = core.getInput('patch') === 'true' || core.getInput('patch') > 0;
 
 /// run
 async function run()
@@ -9427,10 +9429,27 @@ async function run()
         const verElement = get_csproj_version(doc);
         if (verElement)
         {
-            const ver = parse_version(version);
+            const ver = parse_version(verElement.data);
             if (ver)
             {
-                verElement.data = version;
+                let [major, minor, patch] = ver;
+                console.dir({ver})
+                console.dir({major, minor, patch})
+                console.dir({bump_major, bump_minor, bump_patch})
+
+                if (bump_major)
+                {
+                    major++;
+                }
+                if (bump_minor)
+                {
+                    minor++;
+                }
+                if (bump_patch)
+                {
+                    patch++;
+                }
+                verElement.data = `${major}.${minor}.${patch}`;
                 write_csproj(file, doc);
             }
             else

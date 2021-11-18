@@ -1,5 +1,5 @@
-name: 'Set CSProj Version'
-description: 'Sets the current version to a given .csproj'
+name: 'Bump CSProj Version'
+description: 'Bumps the current version of a given .csproj'
 branding:
     icon: 'anchor'
     color: 'blue'
@@ -21,14 +21,21 @@ inputs:
       'XPath to version element.'
     required: false
     default: '//PropertyGroup/Version'
-  version:
+  major:
     description: |
-      'The semver version to set.'
-      'Version has to be compatible to the provided regex.'
-    required: true
+      'Whether to bump the major revision.'
+    default: false
+  minor:
+    description: |
+      'Whether to bump the minor revision.'
+    default: false
+  patch:
+    description: |
+      'Whether to bump the patch revision.'
+    default: false
 outputs:
   version:
-    description: 'Verified and set version string'
+    description: 'Verified and bumped version string'
 runs:
   using: 'node12'
   main: 'dist/index.js'
