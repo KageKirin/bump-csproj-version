@@ -21,9 +21,9 @@ async function run()
             if (ver)
             {
                 let [major, minor, patch, prerelease, buildmetadata] = ver;
-                console.dir({ver})
-                console.dir({major, minor, patch})
-                console.dir({bump_major, bump_minor, bump_patch, prerelease, buildmetadata})
+                console.dir({ver});
+                console.dir({major, minor, patch, prerelease, buildmetadata});
+                console.dir({bump_major, bump_minor, bump_patch});
 
                 if (bump_major)
                 {
@@ -41,11 +41,11 @@ async function run()
 
                 if (prerelease)
                 {
-                    pkg.version += "-" + prerelease;
+                    pkg.version += `-${prerelease}`;
                 }
                 if (buildmetadata)
                 {
-                    pkg.version += "+" + buildmetadata;
+                    pkg.version += `+${buildmetadata}`;
                 }
 
                 fs.writeFileSync(file, JSON.stringify(pkg, null, '  ') + '\n');
