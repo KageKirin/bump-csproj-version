@@ -15,7 +15,7 @@ jobs:
         uses: ./ # Uses an action in the root directory
         id: test
         with:
-          file: 'testproj/testproj.csproj'
+          file: 'testdata/testproj/testproj.csproj'
           version: '1.2.3'
       - name: Print results
         run: echo ${{ steps.test.outputs.version }}
@@ -25,7 +25,7 @@ jobs:
         uses: ./
         id: simple
         with:
-          file: testdata/simple/package.json
+          file: testdata/simple/simple.csproj
           version: '4.5.6'
       - name: Print results
         run: echo ${{ steps.simple.outputs.version }}
@@ -43,8 +43,9 @@ jobs:
         uses: ./
         id: custom
         with:
-          file: testdata/simple/package.json
+          file: testdata/simple/simple.csproj
           regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
+          xpath: '//PropertyGroup/Version'
           version: '7.8.9'
       - name: Print results
         run: echo ${{ steps.custom.outputs.version }}
@@ -62,7 +63,7 @@ jobs:
         uses: ./
         id: prerelease
         with:
-          file: testdata/prerelease/package.json
+          file: testdata/prerelease/prerelease.csproj
           version: '4.5.6-alpha.1'
       - name: Print results
         run: echo ${{ steps.prerelease.outputs.version }}
@@ -80,7 +81,7 @@ jobs:
         uses: ./
         id: buildmeta
         with:
-          file: testdata/buildmeta/package.json
+          file: testdata/buildmeta/buildmeta.csproj
           version: '4.5.6+baz.56'
       - name: Print results
         run: echo ${{ steps.buildmeta.outputs.version }}
@@ -98,7 +99,7 @@ jobs:
         uses: ./
         id: complex
         with:
-          file: testdata/complex/package.json
+          file: testdata/complex/complex.csproj
           version: '4.5.6-alpha.1+baz.56'
       - name: Print results
         run: echo ${{ steps.complex.outputs.version }}
