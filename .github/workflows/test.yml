@@ -15,7 +15,7 @@ jobs:
         uses: ./ # Uses an action in the root directory
         id: test
         with:
-          file: 'testproj/testproj.csproj'
+          file: 'testdata/testproj/testproj.csproj'
           major: true
           minor: true
           patch: true
@@ -27,7 +27,7 @@ jobs:
         uses: ./
         id: simple_patch
         with:
-          file: testdata/simple/package.json
+          file: testdata/simple/simple.csproj
           patch: true
       - name: Print results
         run: echo ${{ steps.simple_patch.outputs.version }}
@@ -61,7 +61,7 @@ jobs:
         uses: ./
         id: simple_major
         with:
-          file: testdata/simple/package.json
+          file: testdata/simple/simple.csproj
           major: true
       - name: Print results
         run: echo ${{ steps.simple_major.outputs.version }}
@@ -79,7 +79,7 @@ jobs:
         uses: ./
         id: custom
         with:
-          file: testdata/simple/package.json
+          file: testdata/simple/simple.csproj
           regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
           major: true
           minor: true
