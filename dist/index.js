@@ -9480,10 +9480,11 @@ async function run()
 
 function parse_version(version)
 {
-    let match = version.match(regex);
+    const match = version.match(regex);
     if (match)
     {
-        return [match.groups.major, match.groups.minor, match.groups.patch];
+        console.dir({groups: match.groups});
+        return [match.groups.major, match.groups.minor, match.groups.patch, match.groups.prerelease, match.groups.buildmetadata];
     }
     return null
 }

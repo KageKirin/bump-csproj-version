@@ -10,42 +10,103 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # basic simple test: just set this package's version
       - name: Test functionality
         uses: ./ # Uses an action in the root directory
         id: test
         with:
-          version: '1.2.3'
           file: 'testproj/testproj.csproj'
-
+          version: '1.2.3'
       - name: Print results
         run: echo ${{ steps.test.outputs.version }}
 
-      - name: Verify results
-        if: ${{ steps.test.outputs.version == '1.2.3' }}
-        run: echo "Setting the version worked"
-      - name: Verify results (negative case)
-        if: ${{ steps.test.outputs.version != '1.2.3' }}
-        run: |
-          echo "Setting the version did not work"
-          exit -1
-
-      - name: Test functionality with params
-        uses: ./ # Uses an action in the root directory
-        id: testparams
+      # simple test on fixed test data
+      - name: Test on simple format
+        uses: ./
+        id: simple
         with:
-          file: 'testproj/testproj.csproj'
-          regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
+          file: testdata/simple/package.json
           version: '4.5.6'
-          xpath: '//PropertyGroup/Version'
-
       - name: Print results
-        run: echo ${{ steps.testparams.outputs.version }}
-
+        run: echo ${{ steps.simple.outputs.version }}
       - name: Verify results
-        if: ${{ steps.testparams.outputs.version == '4.5.6' }}
-        run: echo "Setting the version worked"
-      - name: Verify results (negative case)
-        if: ${{ steps.testparams.outputs.version != '4.5.6' }}
         run: |
-          echo "Setting the version did not work"
-          exit -1
+          if [ "${{ steps.simple.outputs.version }}" == "4.5.6" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      # simple test with custom regex on fixed test data
+      - name: Test on simple format with custom regex
+        uses: ./
+        id: custom
+        with:
+          file: testdata/simple/package.json
+          regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
+          version: '7.8.9'
+      - name: Print results
+        run: echo ${{ steps.custom.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.custom.outputs.version }}" == "7.8.9" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      # prerelease test on fixed test data
+      - name: Test on prerelease format
+        uses: ./
+        id: prerelease
+        with:
+          file: testdata/prerelease/package.json
+          version: '4.5.6-alpha.1'
+      - name: Print results
+        run: echo ${{ steps.prerelease.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.prerelease.outputs.version }}" == "4.5.6-alpha.1" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      # buildmeta test on fixed test data
+      - name: Test on buildmetadata format
+        uses: ./
+        id: buildmeta
+        with:
+          file: testdata/buildmeta/package.json
+          version: '4.5.6+baz.56'
+      - name: Print results
+        run: echo ${{ steps.buildmeta.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.buildmeta.outputs.version }}" == "4.5.6+baz.56" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      # complex test on fixed test data
+      - name: Test on complex format
+        uses: ./
+        id: complex
+        with:
+          file: testdata/complex/package.json
+          version: '4.5.6-alpha.1+baz.56'
+      - name: Print results
+        run: echo ${{ steps.complex.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.complex.outputs.version }}" == "4.5.6-alpha.1+baz.56" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
