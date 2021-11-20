@@ -10,107 +10,147 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: TODO/Set version to fixed rev
-        run: echo TODO/Set version to fixed rev
-
-      - name: Test functionality (major)
+      # basic simple test: just bump this package's version
+      - name: Test functionality
         uses: ./ # Uses an action in the root directory
-        id: test_major
+        id: test
         with:
           file: 'testproj/testproj.csproj'
           major: true
-
-      - name: Print results
-        run: echo ${{ steps.test_major.outputs.version }}
-
-      - name: Verify results
-        if: ${{ steps.test_major.outputs.version == '1.0.1' }}
-        run: echo "Bumping the version major worked"
-      - name: Verify results (negative case)
-        if: ${{ steps.test_major.outputs.version != '1.0.1' }}
-        run: |
-          echo "Bumping the version major did not work"
-          exit -1
-
-      - name: Test functionality (minor)
-        uses: ./ # Uses an action in the root directory
-        id: test_minor
-        with:
-          file: 'testproj/testproj.csproj'
           minor: true
-
-      - name: Print results
-        run: echo ${{ steps.test_minor.outputs.version }}
-
-      - name: Verify results
-        if: ${{ steps.test_minor.outputs.version == '1.1.1' }}
-        run: echo "Bumping the version minor worked"
-      - name: Verify results (negative case)
-        if: ${{ steps.test_minor.outputs.version != '1.1.1' }}
-        run: |
-          echo "Bumping the version minor did not work"
-          exit -1
-
-      - name: Test functionality (patch)
-        uses: ./ # Uses an action in the root directory
-        id: test_patch
-        with:
-          file: 'testproj/testproj.csproj'
           patch: true
-
       - name: Print results
-        run: echo ${{ steps.test_patch.outputs.version }}
+        run: echo ${{ steps.test.outputs.version }}
 
-      - name: Verify results
-        if: ${{ steps.test_patch.outputs.version == '1.1.2' }}
-        run: echo "Bumping the version patch worked"
-      - name: Verify results (negative case)
-        if: ${{ steps.test_patch.outputs.version != '1.1.2' }}
-        run: |
-          echo "Bumping the version patch did not work"
-          exit -1
-
-      - name: Test functionality with params
-        uses: ./ # Uses an action in the root directory
-        id: testparams
+      # simple test on fixed test data
+      - name: Test patch on simple format
+        uses: ./
+        id: simple_patch
         with:
-          file: 'testproj/testproj.csproj'
+          file: testdata/simple/package.json
+          patch: true
+      - name: Print results
+        run: echo ${{ steps.simple_patch.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.simple_patch.outputs.version }}" == "1.2.4" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      - name: Test minor on simple format
+        uses: ./
+        id: simple_minor
+        with:
+          file: testdata/simple/simple.csproj
+          minor: true
+      - name: Print results
+        run: echo ${{ steps.simple_minor.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.simple_minor.outputs.version }}" == "1.3.4" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      - name: Test major on simple format
+        uses: ./
+        id: simple_major
+        with:
+          file: testdata/simple/package.json
+          major: true
+      - name: Print results
+        run: echo ${{ steps.simple_major.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.simple_major.outputs.version }}" == "2.3.4" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      # simple test with custom regex on fixed test data
+      - name: Test on simple format with custom regex
+        uses: ./
+        id: custom
+        with:
+          file: testdata/simple/package.json
           regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
           major: true
           minor: true
           patch: true
-          xpath: '//PropertyGroup/Version'
-
       - name: Print results
-        run: echo ${{ steps.testparams.outputs.version }}
-
+        run: echo ${{ steps.custom.outputs.version }}
       - name: Verify results
-        if: ${{ steps.testparams.outputs.version == '2.2.3' }}
-        run: echo "Bumping the version worked"
-      - name: Verify results (negative case)
-        if: ${{ steps.testparams.outputs.version != '2.2.3' }}
         run: |
-          echo "Bumping the version did not work"
-          exit -1
+          if [ "${{ steps.custom.outputs.version }}" == "3.4.5" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
 
-      - name: Test functionality with int params
-        uses: ./ # Uses an action in the root directory
-        id: intparams
+      # prerelease test on fixed test data
+      - name: Test on prerelease format
+        uses: ./
+        id: prerelease
         with:
-          file: 'testproj/testproj.csproj'
-          regex: '^(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9]+)$'
-          major: 1
-          minor: 1
-          patch: 0
-
+          file: testdata/prerelease/prerelease.csproj
+          major: true
+          minor: true
+          patch: true
       - name: Print results
-        run: echo ${{ steps.intparams.outputs.version }}
-
+        run: echo ${{ steps.prerelease.outputs.version }}
       - name: Verify results
-        if: ${{ steps.intparams.outputs.version == '3.3.3' }}
-        run: echo "Bumping the version worked"
-      - name: Verify results (negative case)
-        if: ${{ steps.intparams.outputs.version != '3.3.3' }}
         run: |
-          echo "Bumping the version did not work"
-          exit -1
+          if [ "${{ steps.prerelease.outputs.version }}" == "2.3.4-beta.5" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      # buildmeta test on fixed test data
+      - name: Test on buildmetadata format
+        uses: ./
+        id: buildmeta
+        with:
+          file: testdata/buildmeta/buildmeta.csproj
+          major: true
+          minor: true
+          patch: true
+      - name: Print results
+        run: echo ${{ steps.buildmeta.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.buildmeta.outputs.version }}" == "2.3.4+foobar.42" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi
+
+      # complex test on fixed test data
+      - name: Test on complex format
+        uses: ./
+        id: complex
+        with:
+          file: testdata/complex/complex.csproj
+          major: true
+          minor: true
+          patch: true
+      - name: Print results
+        run: echo ${{ steps.complex.outputs.version }}
+      - name: Verify results
+        run: |
+          if [ "${{ steps.complex.outputs.version }}" == "2.3.4-beta.5+foobar.42" ]; then
+            echo "Version matches"
+          else
+            echo "Version mismatch"
+            exit -1
+          fi

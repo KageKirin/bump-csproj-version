@@ -23,10 +23,10 @@ async function run()
             const ver = parse_version(verElement.data);
             if (ver)
             {
-                let [major, minor, patch] = ver;
-                console.dir({ver})
-                console.dir({major, minor, patch})
-                console.dir({bump_major, bump_minor, bump_patch})
+                let [major, minor, patch, prerelease, buildmetadata] = ver;
+                console.dir({ver});
+                console.dir({major, minor, patch, prerelease, buildmetadata});
+                console.dir({bump_major, bump_minor, bump_patch});
 
                 if (bump_major)
                 {
@@ -41,6 +41,16 @@ async function run()
                     patch++;
                 }
                 verElement.data = `${major}.${minor}.${patch}`;
+
+                if (prerelease)
+                {
+                    verElement.data += `-${prerelease}`;
+                }
+                if (buildmetadata)
+                {
+                    verElement.data += `+${buildmetadata}`;
+                }
+
                 write_csproj(file, doc);
             }
             else
@@ -90,10 +100,11 @@ async function run()
 
 function parse_version(version)
 {
-    let match = version.match(regex);
+    const match = version.match(regex);
     if (match)
     {
-        return [match.groups.major, match.groups.minor, match.groups.patch];
+        console.dir({groups: match.groups});
+        return [match.groups.major, match.groups.minor, match.groups.patch, match.groups.prerelease, match.groups.buildmetadata];
     }
     return null
 }
