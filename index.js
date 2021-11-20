@@ -20,10 +20,10 @@ async function run()
             const ver = parse_version(pkg.version);
             if (ver)
             {
-                let [major, minor, patch] = ver;
-                console.dir({ver})
-                console.dir({major, minor, patch})
-                console.dir({bump_major, bump_minor, bump_patch})
+                let [major, minor, patch, prerelease, buildmetadata] = ver;
+                console.dir({ver});
+                console.dir({major, minor, patch, prerelease, buildmetadata});
+                console.dir({bump_major, bump_minor, bump_patch});
 
                 if (bump_major)
                 {
@@ -38,6 +38,16 @@ async function run()
                     patch++;
                 }
                 pkg.version = `${major}.${minor}.${patch}`;
+
+                if (prerelease)
+                {
+                    pkg.version += `-${prerelease}`;
+                }
+                if (buildmetadata)
+                {
+                    pkg.version += `+${buildmetadata}`;
+                }
+
                 fs.writeFileSync(file, JSON.stringify(pkg, null, '  ') + '\n');
             }
             else
@@ -89,7 +99,7 @@ function parse_version(version)
     let match = version.match(regex);
     if (match)
     {
-        return [match.groups.major, match.groups.minor, match.groups.patch];
+        return [match.groups.major, match.groups.minor, match.groups.patch, match.groups.prerelease, match.groups.buildmetadata];
     }
     return null
 }
