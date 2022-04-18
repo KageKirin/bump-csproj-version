@@ -1,0 +1,41 @@
+name: 'Bump CSProj Version'
+description: 'Bumps the current version of a given .csproj'
+branding:
+  icon: anchor
+  color: blue
+inputs:
+  file:
+    description: |
+      'The .csproj from which to read/write the version.'
+      'Set if you need to read a different file / or different folder.'
+    required: true
+  regex:
+    description: |
+      'ECMAScript Regular Expression to parse the version string for verification.'
+      'Defaults to being semver, i.e. "major.minor.patch"'
+      'Set if you to be compatible with a different, non-semver format.'
+    required: false
+    default: '^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)(\.(?<patch>0|[1-9]\d*))?(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
+  xpath:
+    description: |
+      'XPath to version element.'
+    required: false
+    default: '//PropertyGroup/Version'
+  major:
+    description: |
+      'Whether to bump the major revision.'
+    default: false
+  minor:
+    description: |
+      'Whether to bump the minor revision.'
+    default: false
+  patch:
+    description: |
+      'Whether to bump the patch revision.'
+    default: false
+outputs:
+  version:
+    description: 'Verified and bumped version string'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
