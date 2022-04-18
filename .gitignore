@@ -1,0 +1,4 @@
+# .gitignore for bump-csproj-version
+node_modules/
+**/obj/
+**/bin/
