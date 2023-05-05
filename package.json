@@ -13,14 +13,14 @@
   "keywords": [
     "semver"
   ],
-  "author": "Chris Helmich",
+  "author": "Chris Helmich, MWin10",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/KageKirin/bump-csproj-version/issues"
   },
-  "homepage": "https://github.com/KageKirin/bump-csproj-version#readme",
+  "homepage": "https://github.com/MWin10/bump-csproj-version#readme",
   "dependencies": {
-    "@actions/core": "^1.6.0",
+    "@actions/core": "^1.10.0",
     "@xmldom/xmldom": "^0.7.5",
     "xpath": "^0.0.32"
   }
