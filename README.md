@@ -33,8 +33,8 @@ jobs:
 
       - name: Commit new version
         run: |
-          git commit -am "CI: bump version to ${{ steps.test.package_version.version }}"
-          git tag -m "CI: create new tag" v${{ steps.test.package_version.version }}
+          git commit -am "CI: bump version to ${{ steps.package_version.outputs.version }}"
+          git tag -m "CI: create new tag" v${{ steps.package_version.outputs.version }}
           git push --follow-tags https://${{ github.token }}@github.com/OWNER/REPO
 ```
 
