@@ -1,4 +1,4 @@
-name: 'Bump CSProj Version'
+name: 'Bump CSProj Version Fork'
 description: 'Bumps the current version of a given .csproj'
 branding:
   icon: anchor
