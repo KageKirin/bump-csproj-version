@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/KageKirin/bump-csproj-version.git"
+    "url": "git+ssh://git@github.com/MWin10/bump-csproj-version-fork.git"
   },
   "keywords": [
     "semver"
