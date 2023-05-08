@@ -22,19 +22,19 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Bump version
         id: package_version
-        uses: KageKirin/bump-csproj-version@v0
+        uses: KageKirin/bump-csproj-version@latest
         with:
           file: src/a_project.csproj
           patch: true
 
       - name: Commit new version
         run: |
-          git commit -am "CI: bump version to ${{ steps.test.package_version.version }}"
-          git tag -m "CI: create new tag" v${{ steps.test.package_version.version }}
+          git commit -am "CI: bump version to ${{ steps.package_version.outputs.version }}"
+          git tag -m "CI: create new tag" v${{ steps.package.package_version.outputs.version }}
           git push --follow-tags https://${{ github.token }}@github.com/OWNER/REPO
 ```
 
