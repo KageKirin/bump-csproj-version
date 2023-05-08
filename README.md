@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump version
         id: package_version
@@ -34,8 +36,8 @@ jobs:
       - name: Commit new version
         run: |
           git commit -am "CI: bump version to ${{ steps.package_version.outputs.version }}"
-          git tag -m "CI: create new tag" v${{ steps.package.package_version.outputs.version }}
-          git push --follow-tags https://${{ github.token }}@github.com/OWNER/REPO
+          git tag -m "CI: create new tag" v${{ steps.package_version.outputs.version }}
+          git push --follow-tags
 ```
 
 ## Inputs
