@@ -1,4 +1,4 @@
-# bump-csproj-version
+# bump-csproj-version-fork
 
 GitHub Action to bump the current dotnet .csproj project version, or a part of it, to the next higher revision.
 Places the bumped version into a context variable for later reference.
@@ -22,11 +22,13 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump version
         id: package_version
-        uses: KageKirin/bump-csproj-version@v0
+        uses: MWin10/bump-csproj-version-fork@latest
         with:
           file: src/a_project.csproj
           patch: true
@@ -34,8 +36,8 @@ jobs:
       - name: Commit new version
         run: |
           git commit -am "CI: bump version to ${{ steps.package_version.outputs.version }}"
-          git tag -m "CI: create new tag" v${{ steps.package_version.outputs.version }}
-          git push --follow-tags https://${{ github.token }}@github.com/OWNER/REPO
+          git tag -a v${{ steps.package_version.outputs.version }}
+          git push --follow-tags
 ```
 
 ## Inputs
