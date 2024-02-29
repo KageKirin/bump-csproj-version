@@ -2,7 +2,7 @@ name: Bump CSProj Version
 description: Bumps the current version of a given .csproj
 branding:
   icon: anchor
-  color: blue
+  color: yellow
 inputs:
   file:
     description: |
@@ -41,5 +41,5 @@ outputs:
   version:
     description: Verified and bumped version string
 runs:
-  using: node16
+  using: node20
   main: dist/index.js
